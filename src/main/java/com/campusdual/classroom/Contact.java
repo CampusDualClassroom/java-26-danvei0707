@@ -8,12 +8,51 @@ public class Contact implements ICallActions{
 
     // INICIALIZACIÓN VARIABLES Y CONSTRUCTOR
 
-    protected String name;
-    protected String surnames; // Puede ser más de uno, separado por espacios
-    protected String phone;
-    protected String code;
+    private String name;
+    private String surnames; // Puede ser más de uno, separado por espacios
+    private String phone;
+    private String code;
 
-    public String codify(String name, String surnames){
+    public Contact(String name, String surnames, String phone) {
+        this.name = name.trim();
+        this.surnames = surnames.trim();
+        this.phone = phone.trim();
+        this.code = codify(name, surnames);
+        /*
+        Uso de trim para evitar conflictos al codificar
+        Fuente: https://www.tutorialspoint.com/trim-a-string-in-java-to-remove-leading-and-trailing-spaces */
+    }
+
+    // ACCIONES DE CONTACTO (Métodos requeridos)
+
+    @Override
+    public void callMyNumber() {
+        // Especificar que te estás llamando a ti mismo y mostrar número
+        System.out.println(this.name + " " + this.surnames + ", LLAMANDO A ==> " + this.phone + "(Tu número)");
+    }
+
+    @Override
+    public void callOtherNumber(String number) {
+        // Especificar que llamas a otro contacto, mostrar número
+        System.out.println(this.name + " " + this.surnames + ": LLAMANDO A ==> " + number);
+
+    }
+
+    @Override
+    public void showContactDetails() {
+        StringBuilder msg = new StringBuilder();
+        msg.append(this.phone).append(" | ");
+        msg.append(this.name).append(" ");
+        msg.append(this.surnames);
+        msg.append(" (").append(this.code).append(")");
+
+        // Mostrar detalles del contacto por pantalla
+
+        System.out.println(msg);
+    }
+
+    // UTILS
+    protected String codify(String name, String surnames){
         StringBuilder code = new StringBuilder();
         StringBuilder n = new StringBuilder(name);
         StringBuilder s = new StringBuilder(surnames);
@@ -43,45 +82,9 @@ public class Contact implements ICallActions{
             }
         }
         return normalice(code.toString());
+        // String Builder docs: https://docs.oracle.com/javase/8/docs/api/java/lang/StringBuilder.html
     }
 
-    public Contact(String name, String surnames, String phone) {
-        this.name = name.trim();
-        this.surnames = surnames.trim();
-        this.phone = phone.trim();
-        // this.code = codify(name, surnames);
-        /*
-            Uso de trim para evitar conflictos al crear el código
-            Fuente: https://www.tutorialspoint.com/trim-a-string-in-java-to-remove-leading-and-trailing-spaces
-        */
-    }
-
-
-    // ACCIONES DE CONTACTO (Métodos requeridos)
-
-    @Override
-    public void callMyNumber() {
-        // Especificar que te estás llamando a ti mismo y mostrar número
-        System.out.println("Llamándote a ti mismo. Marcado: " + this.phone);
-    }
-
-    @Override
-    public void callOtherNumber(String number) {
-        // Especificar que llamas a otro contacto, mostrar número
-        System.out.println("Llamando al contacto. Marcado: " + number);
-
-    }
-
-    @Override
-    public void showContactDetails() {
-        // Mostrar detalles del contacto por pantalla
-        System.out.println("Información" + " de " + this.code);
-        System.out.println("\t" + this.name);
-        System.out.println("\t" + this.surnames);
-        System.out.println("\t" + this.phone);
-    }
-
-    // UTILS
     protected String normalice(String text){
         return Normalizer
                 .normalize(text, Normalizer.Form.NFD) // Separa el acento de la letra (á: a + ´)
@@ -90,7 +93,6 @@ public class Contact implements ICallActions{
 
         // Fuente (lógica acentos): https://stackoverflow.com/questions/15190656/easy-way-to-remove-accents-from-a-unicode-string
     }
-
 
 
     // GETTERS - ! No necesitamos setters que modifiquen

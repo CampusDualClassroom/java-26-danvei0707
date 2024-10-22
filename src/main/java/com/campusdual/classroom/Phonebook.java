@@ -13,26 +13,33 @@ public class Phonebook implements ContactListActions{
 
     @Override
     public void showPhonebook() {
+        System.out.println("Lista de contactos:");
         // Iterar los elementos de la lista de contactos
-        for (Map.Entry<String, Contact> contact: contactList.entrySet()){
-            System.out.println("Contacto! Sin definir");
+        for (Map.Entry<String, Contact> cEntry: contactList.entrySet()){
+            System.out.print("\t");
+            cEntry.getValue().showContactDetails();
         }
+        System.out.println("Fin de la lista");
     }
 
     // Poder crear y añadir un contacto
     @Override
     public void addContact(Contact contact) {
         // Añadir el código de contacto (key) y el contacto (value)
-        //contactList.put();
+        contactList.put(contact.getCode(), contact);
+        System.out.print("Contacto añadido: ");
+        contact.showContactDetails();
     }
 
     // Eliminar un contacto
     @Override
     public void deleteContact(String contactCode) {
-
+        System.out.print("Eliminando contacto: " + contactCode + "..." );
+        contactList.remove(contactCode);
+        System.out.println(" OK");
     }
 
-    // Seleccionar un contacto y mostrar su menú de opciones ????
+    // ¿Seleccionar un contacto y mostrar su menú de opciones?
     @Override
     public Map<String, Contact> getData() {
         return this.contactList;
